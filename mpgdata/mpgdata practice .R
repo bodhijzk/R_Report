@@ -1,0 +1,46 @@
+
+library(ggplot2)
+library(dplyr)
+#제조회사별 고속도로 연비 비교
+mpg<-as.data.frame(mpg)
+mpg1<- mpg
+mpg1%>% 
+  group_by(manufacturer) %>%
+  summarise(mean_hwy=mean(hwy)) %>%
+  arrange(mean_hwy)
+q<-ggplot(mpg1, aes(manufacturer,hwy))+ geom_boxplot()+
+  ggtitle("제조회사별 고속도로 연비 비교")
+q + theme(plot.subtitle = element_text(vjust = 1), 
+          plot.caption = element_text(vjust = 1), 
+          axis.line = element_line(linetype = "solid"))
+
+#배기량(displ)이 4이하인 자동차와 5이상인 자동차의 고속도로연비(hwy)의 평균 비교
+
+mpg <- data.frame(mpg)
+mpg1<- mpg
+table(is.na(mpg1$displ))
+table(is.na(mpg1$hwy))
+mpg1$displcompre <- ifelse(mpg1$displ>=5,"over5","under")
+table(mpg1$displcompre)
+q <- ggplot(data= mpg1,aes(x=mpg1$displcompre,y=hwy))+
+  geom_boxplot()+ggtitle("hdispl 4이하인 hwy 의 값")
+mean(mpg1_under4$hwy)
+mean(mpg1_over5$hwy)
+
+# audi와 toyota의 도시연비(cty)의 평균 연비 비교
+mpg <- data.frame(mpg)
+mpg1<- mpg
+head(mpg1)
+table(is.na(mpg$manufacturer))
+table(is.na(mpg$cty))
+is.na(mpg$cty)
+mpg1%>% 
+  group_by(manufacturer) %>%
+  filter(manufacturer=="audi" | manufacturer=="toyota") %>%
+  summarise(mean(cty))
+p<-mpg1%>% 
+  group_by(manufacturer) %>%
+  filter(manufacturer=="audi" | manufacturer=="toyota")
+ggplot(data=p, aes(x=manufacturer,y=cty))+
+  geom_boxplot()+ggtitle("audi와 toyota 평균 연비 비교")
+View(mpg)
